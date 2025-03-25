@@ -167,6 +167,64 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="-me-2 flex items-center sm:hidden">
+                            <Dropdown>
+                                <Dropdown.Trigger>
+                                        <span className="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                            >
+                                                {currentTeam ? (
+                                                    <span>{currentTeam.name}</span>
+                                                ) : (
+                                                    <span>Switch Teams</span>
+                                                ) }
+                                                <svg
+                                                    className="-me-0.5 ms-2 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                </Dropdown.Trigger>
+                                <Dropdown.Content>
+                                    {allTeams.map((team) => (
+                                        <Dropdown.Link
+                                            key={team.id}
+                                            method="get"
+                                            href={route('teams.show', team.id)}
+                                            preserveState={false}
+                                            preserveScroll={false}
+                                            only={['*']}
+                                            onSuccess={() => {
+                                                // Optional: any additional actions on successful team switch
+                                                window.location.reload();
+                                            }}
+                                        >
+                                            {team.name}
+                                            {team.type === 'owned' ? ' (Owner)' : ' (Member)'}
+                                        </Dropdown.Link>
+                                    ))}
+
+                                    <Dropdown.Link href={route('teams.index')}>
+                                        My Teams
+                                    </Dropdown.Link>
+                                    <Dropdown.Link
+                                        href={route('teams.create')}
+                                        method="get"
+                                        as="button"
+                                    >
+                                        Create New Team
+                                    </Dropdown.Link>
+                                </Dropdown.Content>
+                            </Dropdown>
                             <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
@@ -216,11 +274,14 @@ export default function AuthenticatedLayout({ header, children }) {
                     }
                 >
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
+                        {/*<ResponsiveNavLink*/}
+                        {/*    href={route('dashboard')}*/}
+                        {/*    active={route().current('dashboard')}*/}
+                        {/*>*/}
+                        {/*    Dashboard*/}
+                        {/*</ResponsiveNavLink>*/}
+                        <ResponsiveNavLink href={route('checklists.index')} active={route().current('checklists.index')}>
+                            Checklists
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('checklists.create')} active={route().current('checklists.create')}>
                             New Checklist
