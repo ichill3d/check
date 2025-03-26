@@ -33,4 +33,8 @@ class Team extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+    public function hasUser(User $user) {
+        return $this->owner_id === $user->id
+            || $this->users()->where('users.id', $user->id)->exists();
+    }
 }

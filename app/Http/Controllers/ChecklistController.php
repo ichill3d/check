@@ -81,20 +81,19 @@ class ChecklistController extends Controller
 
         return redirect()->back()->with('success', 'Item added to checklist.');
     }
-        public function toggleItem(Request $request, ChecklistItem $item)
-        {
-            $checklist = $item->checklist;
-            Gate::authorize('update', $checklist);
+    public function toggleItem(Request $request, ChecklistItem $item)
+    {
+        $checklist = $item->checklist;
+        Gate::authorize('toggleChecklistItem', $checklist);
+        $item->is_done = !$item->is_done;
+        $item->save();
 
-            $item->is_done = !$item->is_done;
-            $item->save();
-
-            return back()->with('success', 'Item toggled.');
-        }
-        public function removeItem(ChecklistItem $item) {
-            $checklist = $item->checklist;
-            Gate::authorize('update', $checklist);
-            $item->delete();
-            return back()->with('success', 'Item deleted.');
-        }
+        return back()->with('success', 'Item toggled.');
+    }
+    public function removeItem(ChecklistItem $item) {
+        $checklist = $item->checklist;
+        Gate::authorize('update', $checklist);
+        $item->delete();
+        return back()->with('success', 'Item deleted.');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Checklist;
+use App\Models\ChecklistItem;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -63,4 +64,14 @@ class ChecklistPolicy
     {
         return false;
     }
+
+    public function toggleChecklistItem(User $user, Checklist $checklist): bool
+    {
+        $team = $checklist->team;
+        if($team === null) {
+           return $checklist->user->id === $user->id;
+        }
+        return $team->hasUser($user);
+    }
+
 }
