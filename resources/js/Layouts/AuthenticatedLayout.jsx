@@ -155,6 +155,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </Dropdown.Link>
 
                                         <Dropdown.Link
+                                            href={route('notifications.settings')}
+                                        >
+                                            Notifications Settings
+                                        </Dropdown.Link>
+
+                                        <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
                                             as="button"
