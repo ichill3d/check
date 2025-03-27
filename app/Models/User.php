@@ -70,4 +70,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Team::class, 'id', 'current_team_id');
     }
+    public function notificationPreferences()
+    {
+        return $this->hasMany(NotificationPreference::class);
+    }
 }

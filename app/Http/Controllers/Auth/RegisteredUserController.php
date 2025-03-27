@@ -47,10 +47,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         if ($token = session('invite_token')) {
-            // Remove it from session
             session()->forget('invite_token');
-
-            // Redirect to invitation accept route
             return redirect()->route('team.invitations.accept', ['token' => $token]);
         }
 

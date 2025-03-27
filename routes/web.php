@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamInvitationController;
@@ -54,6 +55,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{teamId}/member/{memberId}',[TeamController::class, 'removeMember'])->name('teams.members.destroy');
 
         Route::post('/{id}/invitation', [TeamController::class, 'sendInvitation'])->name('teams.invitations.store');
+    });
+
+    Route::prefix('notifications')->group(function () {
+        Route::get('/settings', [NotificationController::class, 'settings'])->name('notifications.settings');
+        Route::patch('/settings/{id}/toggle', [NotificationController::class, 'settingsToggle'])->name('notifications.settings.toggle');
     });
 
 
