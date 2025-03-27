@@ -20,7 +20,7 @@ return new class extends Migration
 
         DB::table('notification_channels')->insert([
             ['key' => 'email', 'label' => 'Email', 'created_at' => now(), 'updated_at' => now()],
-            ['key' => 'in_app', 'label' => 'In-App', 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'database', 'label' => 'In-App', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 

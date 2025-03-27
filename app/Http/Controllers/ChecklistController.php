@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChecklistItemActivity;
 use Illuminate\Http\Request;
 
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\ChecklistCreatedByTeamMember;
 
 class ChecklistController extends Controller
 {
@@ -24,6 +27,15 @@ class ChecklistController extends Controller
             $currentTeam = $request->user()->currentTeam ?? null;
             $validated['team_id'] = $currentTeam ? $currentTeam->id : null;
             $newList = $request->user()->checklists()->create($validated);
+            $newList->load('user', 'team');
+
+            if($currentTeam) {
+                $users = $currentTeam->allUsersQuery()
+                    ->where('users.id', '!=', $user->id)
+                    ->with('notificationPreferences.channel')->get();
+                Notification::send($users, new ChecklistCreatedByTeamMember($newList));
+            }
+
             return redirect()->route('checklists.show', $newList->id);
         } else {
             abort(403, 'You cannot create a checklist for another user.');
@@ -86,6 +98,15 @@ class ChecklistController extends Controller
         $checklist = $item->checklist;
         Gate::authorize('toggleChecklistItem', $checklist);
         $item->is_done = !$item->is_done;
+        if($item->checklist->team && $item->is_done) {
+            ChecklistItemActivity::create([
+                'user_id' => auth()->id(),
+                'checklist_id' => $checklist->id,
+                'checklist_item_id' => $item->id,
+                'action' => 'checked',
+                'created_at' => now(),
+            ]);
+        }
         $item->save();
 
         return back()->with('success', 'Item toggled.');

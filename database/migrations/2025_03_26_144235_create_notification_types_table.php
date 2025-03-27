@@ -19,8 +19,8 @@ return new class extends Migration
         });
 
         DB::table('notification_types')->insert([
-            ['key' => 'checklist_created', 'label' => 'Checklist Created', 'created_at' => now(), 'updated_at' => now()],
-            ['key' => 'checkitem_completed', 'label' => 'Checklist Item Completed', 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'checklist_created', 'label' => 'Checklist Created by Team member', 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'checkitem_summary', 'label' => 'Summary of Checklist Item Completed by Team member', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 
