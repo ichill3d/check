@@ -56,8 +56,8 @@ class ChecklistCreatedByTeamMember extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('A New Checklist Was Created')
-            ->line("{$this->checklist->user->name} created a checklist.")
+            ->subject( "{$this->checklist->user->name} created the checklist  '{$this->checklist->title}'")
+            ->line("{$this->checklist->user->name} created a checklist '{$this->checklist->title}'")
             ->action('View Checklist', route('checklists.show', $this->checklist->id));
     }
 
