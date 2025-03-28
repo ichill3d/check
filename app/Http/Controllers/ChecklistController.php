@@ -84,7 +84,7 @@ class ChecklistController extends Controller
     }
     public function addItem(Request $request, Checklist $checklist)
     {
-        Gate::authorize('update', $checklist);
+        Gate::authorize('toggleChecklistItem', $checklist);
         $validated = $request->validate([
             'content' => 'required|string|max:255',
         ]);
